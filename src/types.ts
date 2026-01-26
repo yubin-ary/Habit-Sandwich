@@ -3,4 +3,5 @@ export type Habit = {
   title: string;
   ingredient: string;
   isDone: boolean;
+  completedDate: string | null;
 };
