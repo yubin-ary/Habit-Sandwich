@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { Habit } from "./types";
 import CreatePopup from "./CreatePopup";
 import Counter from "./Counter";
+import SandwichStack from "./SandwichStack";
 
 const Main = () => {
   const [habits, setHabits] = useState<Habit[]>([
@@ -14,6 +15,12 @@ const Main = () => {
     },
   ]);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [baseCount, setBaseCount] = useState(0);
+  const todayCount = useMemo(() => {
+    const today = new Date().toLocaleDateString("sv-SE");
+    return habits.filter((v) => v.completedDate === today).length;
+  }, [habits]);
+  const stackCount = baseCount + todayCount;
 
   // ===========================================================================
   //  onCreateHabit 새로운 습관 생성
@@ -54,13 +61,17 @@ const Main = () => {
     );
   };
   // ===========================================================================
-  // count 하기
-
+  // layers
   // ===========================================================================
+  const todayLayers = habits
+    .filter((v) => v.completedDate === new Date().toLocaleDateString("sv-SE"))
+    .map((h) => h.ingredient);
+
   return (
     <div>
       <h2>My habits</h2>
-      <Counter habits={habits}></Counter>
+      <Counter habits={habits} todayCount={todayCount}></Counter>
+      <SandwichStack layers={todayLayers}></SandwichStack>
       <button onClick={onClickToCreate}>Create new habit</button>
       {isCreateOpen ? (
         <CreatePopup

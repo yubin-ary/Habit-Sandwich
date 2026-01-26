@@ -1,13 +1,11 @@
 import type { Habit } from "./types";
 type Props = {
   habits: Habit[];
+  todayCount: number;
 };
-const Counter = ({ habits }: Props) => {
-  const todayCount = habits.filter(
-    (v) => v.completedDate === new Date().toLocaleDateString("sv-SE")
-  ).length;
+const Counter = ({ habits, todayCount }: Props) => {
   const allCount = habits.filter((v) => v.isDone === true).length;
-
+  localStorage.setItem("allCount", `${allCount}`);
   return (
     <div>
       <h3>Today:{todayCount}</h3>
