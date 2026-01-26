@@ -4,7 +4,7 @@ type Props = {
 const SandwichStack = ({ layers }: Props) => {
   return (
     <div>
-      {layers.reverse().map((v, i) => (
+      {[...layers].reverse().map((v, i) => (
         <div key={i}>{v}</div>
       ))}
     </div>
