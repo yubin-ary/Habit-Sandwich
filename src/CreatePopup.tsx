@@ -13,7 +13,12 @@ const CreatePopup = ({ onCreateHabit, onClosePopup }: Props) => {
     setIngredient(e.target.value);
   };
   const onClick = () => {
-    onCreateHabit(title, ingredient);
+    if (title !== "" && ingredient !== "") {
+      onCreateHabit(title, ingredient);
+      onClosePopup();
+    }
+  };
+  const onClose = () => {
     onClosePopup();
   };
   return (
@@ -30,6 +35,7 @@ const CreatePopup = ({ onCreateHabit, onClosePopup }: Props) => {
         <option value="ham">ham</option>
       </select>
       <button onClick={onClick}>Save</button>
+      <button onClick={onClose}>Cancle</button>
     </div>
   );
 };

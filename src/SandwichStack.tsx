@@ -1,12 +1,21 @@
 type Props = {
-  layers: string[];
+  todaySandwich: {
+    date: string;
+    habits: {
+      habitId: string;
+      completed: boolean;
+      ingredient: string;
+    }[];
+  };
 };
-const SandwichStack = ({ layers }: Props) => {
+const SandwichStack = ({ todaySandwich }: Props) => {
   return (
     <div>
-      {[...layers].reverse().map((v, i) => (
-        <div key={i}>{v}</div>
-      ))}
+      {todaySandwich.habits
+        .filter((v) => v.completed === true)
+        .map((v) => {
+          return <div>{v.ingredient}</div>;
+        })}
     </div>
   );
 };
