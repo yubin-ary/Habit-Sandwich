@@ -23,10 +23,22 @@ const Main = () => {
     date: "2026-01-01",
     habits: habits.map((v) => ({
       habitId: v.id,
+      habitTitle: v.title,
       ingredient: v.ingredient,
       completed: false,
     })),
   });
+  const daySandwich = useMemo<DaySandwich>(() => {
+    const completedCount = todaySandwich.habits.filter(
+      (v) => v.completed
+    ).length;
+    return {
+      ...todaySandwich,
+      perfect:
+        todaySandwich.habits.length > 0 &&
+        completedCount === todaySandwich.habits.length,
+    };
+  }, [todaySandwich]);
   // ===========================================================================
   //
   // ===========================================================================
@@ -39,11 +51,13 @@ const Main = () => {
       const nextDate = new Date().toLocaleDateString("sv-SE");
       setTodayDate((prevDate) => (prevDate === nextDate ? prevDate : nextDate));
       if (todaySandwich.date === nextDate) return;
-      setSandwichHistory((prev) => [...prev, todaySandwich]);
+
+      setSandwichHistory((prev) => [...prev, daySandwich]);
       setTodaySandwich({
         date: nextDate,
         habits: habits.map((v) => ({
           habitId: v.id,
+          habitTitle: v.title,
           ingredient: v.ingredient,
           completed: false,
         })),
@@ -55,7 +69,7 @@ const Main = () => {
       clearTimeout(timeoutId);
       clearInterval(id);
     };
-  }, [habits, todaySandwich]);
+  }, [daySandwich, habits, todaySandwich]);
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
@@ -105,7 +119,8 @@ const Main = () => {
   return (
     <div>
       <Clock></Clock>
-      <h2>Today's Sandwich 🥪</h2>
+
+      <h2>{localStorage.getItem("name")}'s Sandwich 🥪</h2>
 
       <SandwichStack todaySandwich={todaySandwich}></SandwichStack>
       <button onClick={onClickToCreate}>Create new habit</button>

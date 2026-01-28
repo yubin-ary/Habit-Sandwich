@@ -3,6 +3,7 @@ type Props = {
     date: string;
     habits: {
       habitId: string;
+      habitTitle?: string;
       completed: boolean;
       ingredient: string;
     }[];
