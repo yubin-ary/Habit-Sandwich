@@ -122,7 +122,10 @@ const Main = () => {
 
       <h2>{localStorage.getItem("name")}'s Sandwich 🥪</h2>
 
-      <SandwichStack todaySandwich={todaySandwich}></SandwichStack>
+      <SandwichStack
+        todaySandwich={todaySandwich}
+        isPerfect={daySandwich.perfect}
+      ></SandwichStack>
       <button onClick={onClickToCreate}>Create new habit</button>
       {isCreateOpen ? (
         <CreatePopup
@@ -141,7 +144,10 @@ const Main = () => {
                   onToggleDone(habit.id);
                 }}
               >
-                done
+                {todaySandwich.habits.find((v) => v.habitId == habit.id)
+                  .completed
+                  ? "☐"
+                  : "☑︎"}
               </button>
             </li>
           );

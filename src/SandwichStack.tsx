@@ -8,10 +8,12 @@ type Props = {
       ingredient: string;
     }[];
   };
+  isPerfect: boolean;
 };
-const SandwichStack = ({ todaySandwich }: Props) => {
+const SandwichStack = ({ todaySandwich, isPerfect }: Props) => {
   return (
     <div>
+      {isPerfect ? <div>top bread</div> : null}
       {todaySandwich.habits
         .filter((v) => v.completed === true)
         .map((v) => {
