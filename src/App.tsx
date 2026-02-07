@@ -2,8 +2,6 @@ import { useState } from "react";
 import Main from "./Main";
 import Onboarding from "./Onboarding";
 
-import "./App.css";
-
 function App() {
   const [userName, setUserName] = useState(() => {
     const savedName = localStorage.getItem("name");
