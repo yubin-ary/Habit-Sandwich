@@ -1,0 +1,89 @@
+* {
+  box-sizing: border-box;
+}
+
+.overlay {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 9999;
+}
+.popupBox {
+  position: fixed;
+
+  width: 600px;
+  height: 500px;
+  padding: 25px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border-radius: 10px;
+  border: 2px solid black;
+}
+.input {
+  width: 100%;
+  height: 40px;
+  margin: auto;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 1px solid black;
+}
+.option {
+  height: 40px;
+}
+.buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  overflow-x: inherit;
+}
+
+.items {
+  flex-shrink: 0;
+  height: 40px;
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: 1rem;
+  border-radius: 20px;
+  cursor: grab;
+  border: 1px solid black;
+}
+.items:hover {
+  background-color: rgb(101, 232, 255);
+}
+.items:active {
+  cursor: grabbing;
+}
+.active {
+  background-color: rgb(101, 232, 255);
+}
+.confirm {
+  position: absolute;
+  bottom: 15px;
+  display: flex;
+  justify-content: space-between;
+  /* ! absolute 포지션일경우 자동으로 부모 너비 상속하지 않음. 설정해줘야함*/
+
+  left: 15px;
+  right: 15px;
+}
+.backButton {
+  height: 50px;
+  border-radius: 10px;
+  width: 49%;
+  border: 1px solid black;
+}
+.saveButton {
+  height: 50px;
+  border-radius: 10px;
+  width: 49%;
+  border: 1px solid black;
+  background-color: rgb(101, 232, 255);
+}

@@ -87,7 +87,7 @@ const Main = () => {
       if (todaySandwich.date === nextDate) return;
 
       // 어제 todaySandwich를 sandwichHistory에 저장하고
-      // 새로운 todaySandwich를 생성 (같은 스냅샷 기준)
+      // 새로운 todaySandwich를 생성
       setTodaySandwich((prevToday) => {
         const completedCount = prevToday.habits.filter(
           (v) => v.completed
