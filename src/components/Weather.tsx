@@ -1,4 +1,4 @@
-import type { WeatherState } from "./types";
+import type { WeatherState } from "../types/types";
 
 const xyRequest = async (url: string): Promise<string | undefined> => {
   try {

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import styles from "./CreatePopup.module.css";
+import styles from "../styles/CreatePopup.module.css";
 type Props = {
   onCreateHabit: (title: string, ingredient: string) => void;
   onClosePopup: () => void;

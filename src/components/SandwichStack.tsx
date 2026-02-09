@@ -1,4 +1,4 @@
-import styles from "./SandwichStack.module.css";
+import styles from "../styles/SandwichStack.module.css";
 type Props = {
   todaySandwich: {
     date: string;

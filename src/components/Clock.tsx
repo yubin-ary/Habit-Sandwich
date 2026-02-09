@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import styles from "./Clock.module.css";
+import styles from "../styles/Clock.module.css";
 
 const formatTime = (date: Date) =>
   date.toLocaleDateString("en-US", {

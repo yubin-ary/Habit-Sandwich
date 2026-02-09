@@ -1,11 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Habit, TodaySandwich, DaySandwich } from "./types";
+import type { Habit, TodaySandwich, DaySandwich } from "../types/types";
 import CreatePopup from "./CreatePopup";
 import Clock from "./Clock";
 import SandwichStack from "./SandwichStack";
 import Weather from "./Weather";
-import styles from "./Main.module.css";
-
+import styles from "../styles/Main.module.css";
 const TODAY_SANDWICH_KEY = "todaySandwich";
 
 const getTodayDate = () => new Date().toLocaleDateString("sv-SE");
