@@ -1,9 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Habit, TodaySandwich, DaySandwich } from "../types/types";
-import CreatePopup from "./CreatePopup";
-import Clock from "./Clock";
-import SandwichStack from "./SandwichStack";
-import Weather from "./Weather";
+import CreatePopup from "../components/CreatePopup";
+import Clock from "../components/Clock";
+import SandwichStack from "../components/SandwichStack";
+
 import styles from "../styles/Main.module.css";
 const TODAY_SANDWICH_KEY = "todaySandwich";
 
@@ -57,7 +57,9 @@ const Main = () => {
         if (stored?.date === today) {
           return buildTodaySandwich(today, habits, stored);
         }
-      } catch {}
+      } catch {
+        console.warn("failed!");
+      }
     }
     return buildTodaySandwich(today, habits);
   });
@@ -168,10 +170,7 @@ const Main = () => {
       ),
     }));
   };
-  // ===========================================================================
-  //  날씨
-  // ===========================================================================
-  const [weather, setWeather] = useState("");
+
   return (
     <div className={styles.container}>
       <Clock></Clock>
@@ -203,7 +202,7 @@ const Main = () => {
                 }}
               >
                 {todaySandwich.habits.find((v) => v.habitId == habit.id)
-                  .completed
+                  ?.completed
                   ? "■"
                   : "□"}
               </button>

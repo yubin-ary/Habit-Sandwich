@@ -26,3 +26,23 @@ export type WeatherState = {
   T1H: string;
   SKY: string;
 };
+export type WeatherApiResponse = {
+  response: {
+    body: responseBody;
+  };
+};
+export type responseBody = {
+  items: {
+    item: fcstItems[];
+  };
+};
+export type fcstItems = {
+  baseDate: string;
+  baseTime: string;
+  category: string;
+  fcstDate: string;
+  fcstTime: string;
+  fcstValue: string;
+  nx: string;
+  ny: string;
+};
