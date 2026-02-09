@@ -3,6 +3,7 @@ import type { Habit, TodaySandwich, DaySandwich } from "./types";
 import CreatePopup from "./CreatePopup";
 import Clock from "./Clock";
 import SandwichStack from "./SandwichStack";
+import Weather from "./Weather";
 import styles from "./Main.module.css";
 
 const TODAY_SANDWICH_KEY = "todaySandwich";
@@ -73,7 +74,7 @@ const Main = () => {
     };
   }, [todaySandwich]);
   // ===========================================================================
-  //
+  // 날짜감지
   // ===========================================================================
   const [todayDate, setTodayDate] = useState(getTodayDate());
   useEffect(() => {
@@ -168,7 +169,10 @@ const Main = () => {
       ),
     }));
   };
-
+  // ===========================================================================
+  //  날씨
+  // ===========================================================================
+  const [weather, setWeather] = useState("");
   return (
     <div className={styles.container}>
       <Clock></Clock>

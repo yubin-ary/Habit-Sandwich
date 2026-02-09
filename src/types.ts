@@ -21,3 +21,8 @@ export type DaySandwich = {
   }[];
   perfect: boolean;
 };
+export type WeatherState = {
+  PTY: string;
+  T1H: string;
+  SKY: string;
+};
