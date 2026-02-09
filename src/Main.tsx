@@ -3,30 +3,63 @@ import type { Habit, TodaySandwich, DaySandwich } from "./types";
 import CreatePopup from "./CreatePopup";
 import Clock from "./Clock";
 import SandwichStack from "./SandwichStack";
+import styles from "./Main.module.css";
+
+const TODAY_SANDWICH_KEY = "todaySandwich";
+
+const getTodayDate = () => new Date().toLocaleDateString("sv-SE");
+
+const buildTodaySandwich = (
+  date: string,
+  habits: Habit[],
+  existing?: TodaySandwich
+): TodaySandwich => {
+  return {
+    date,
+    habits: habits.map((v) => {
+      const prev = existing?.habits.find((h) => h.habitId === v.id);
+      return {
+        habitId: v.id,
+        habitTitle: v.title,
+        ingredient: v.ingredient,
+        completed: prev?.completed ?? false,
+      };
+    }),
+  };
+};
 
 const Main = () => {
-  const [habits, setHabits] = useState<Habit[]>([
-    {
-      id: "dummy",
-      title: "dummy data",
-      ingredient: "cheese",
-    },
-  ]);
+  const [habits, setHabits] = useState<Habit[]>(
+    JSON.parse(localStorage.getItem("habits") ?? "[]")
+  );
+  useEffect(() => {
+    localStorage.setItem("habits", JSON.stringify(habits));
+  }, [habits]);
+
   // ===========================================================================
   // sandwich history
   // ===========================================================================
-  const [sandwichHistory, setSandwichHistory] = useState<DaySandwich[]>([]);
+  const [sandwichHistory, setSandwichHistory] = useState<DaySandwich[]>(
+    JSON.parse(localStorage.getItem("history") ?? "[]")
+  );
+  useEffect(() => {
+    localStorage.setItem("history", JSON.stringify(sandwichHistory));
+  }, [sandwichHistory]);
   // ===========================================================================
   // 오늘의 샌드위치 생성
   // ===========================================================================
-  const [todaySandwich, setTodaySandwich] = useState<TodaySandwich>({
-    date: "2026-01-01",
-    habits: habits.map((v) => ({
-      habitId: v.id,
-      habitTitle: v.title,
-      ingredient: v.ingredient,
-      completed: false,
-    })),
+  const [todaySandwich, setTodaySandwich] = useState<TodaySandwich>(() => {
+    const today = getTodayDate();
+    const storedRaw = localStorage.getItem(TODAY_SANDWICH_KEY);
+    if (storedRaw) {
+      try {
+        const stored = JSON.parse(storedRaw) as TodaySandwich;
+        if (stored?.date === today) {
+          return buildTodaySandwich(today, habits, stored);
+        }
+      } catch {}
+    }
+    return buildTodaySandwich(today, habits);
   });
   const daySandwich = useMemo<DaySandwich>(() => {
     const completedCount = todaySandwich.habits.filter(
@@ -42,32 +75,51 @@ const Main = () => {
   // ===========================================================================
   //
   // ===========================================================================
-  const [todayDate, setTodayDate] = useState(
-    new Date().toLocaleDateString("sv-SE")
-  );
+  const [todayDate, setTodayDate] = useState(getTodayDate());
+  useEffect(() => {
+    localStorage.setItem(TODAY_SANDWICH_KEY, JSON.stringify(todaySandwich));
+  }, [todaySandwich]);
 
   useEffect(() => {
     const checkDate = () => {
-      const nextDate = new Date().toLocaleDateString("sv-SE");
+      const nextDate = getTodayDate();
       setTodayDate((prevDate) => (prevDate === nextDate ? prevDate : nextDate));
       if (todaySandwich.date === nextDate) return;
 
-      setSandwichHistory((prev) => [...prev, daySandwich]);
-      setTodaySandwich({
-        date: nextDate,
-        habits: habits.map((v) => ({
-          habitId: v.id,
-          habitTitle: v.title,
-          ingredient: v.ingredient,
-          completed: false,
-        })),
+      // 어제 todaySandwich를 sandwichHistory에 저장하고
+      // 새로운 todaySandwich를 생성 (같은 스냅샷 기준)
+      setTodaySandwich((prevToday) => {
+        const completedCount = prevToday.habits.filter(
+          (v) => v.completed
+        ).length;
+        const prevDay: DaySandwich = {
+          ...prevToday,
+          perfect:
+            prevToday.habits.length > 0 &&
+            completedCount === prevToday.habits.length,
+        };
+        setSandwichHistory((prev) => [...prev, prevDay]);
+
+        return buildTodaySandwich(nextDate, habits);
       });
+    };
+    const onVisibility = () => {
+      if (document.visibilityState === "visible") {
+        checkDate();
+      }
+    };
+    const onFocus = () => {
+      checkDate();
     };
     const timeoutId = setTimeout(checkDate, 0);
     const id = setInterval(checkDate, 60 * 1000);
+    window.addEventListener("focus", onFocus);
+    document.addEventListener("visibilitychange", onVisibility);
     return () => {
       clearTimeout(timeoutId);
       clearInterval(id);
+      window.removeEventListener("focus", onFocus);
+      document.removeEventListener("visibilitychange", onVisibility);
     };
   }, [daySandwich, habits, todaySandwich]);
 
@@ -83,6 +135,7 @@ const Main = () => {
       ingredient,
     };
     setHabits((prev) => [...prev, newHabit]);
+
     setTodaySandwich((prev) => ({
       ...prev,
       habits: [
@@ -117,10 +170,12 @@ const Main = () => {
   };
 
   return (
-    <div>
+    <div className={styles.container}>
       <Clock></Clock>
 
-      <h2>{localStorage.getItem("name")}'s Sandwich 🥪</h2>
+      <h2 className={styles.title}>
+        {localStorage.getItem("name")}'s Sandwich 🥪
+      </h2>
 
       <SandwichStack
         todaySandwich={todaySandwich}
@@ -133,7 +188,7 @@ const Main = () => {
           onClosePopup={onClosePopup}
         ></CreatePopup>
       ) : null}
-      <ul>
+      <ul className={styles.list}>
         {habits.map((habit) => {
           return (
             <li key={habit.id}>
@@ -146,8 +201,8 @@ const Main = () => {
               >
                 {todaySandwich.habits.find((v) => v.habitId == habit.id)
                   .completed
-                  ? "☐"
-                  : "☑︎"}
+                  ? "■"
+                  : "□"}
               </button>
             </li>
           );

@@ -1,3 +1,4 @@
+import styles from "./SandwichStack.module.css";
 type Props = {
   todaySandwich: {
     date: string;
@@ -12,13 +13,17 @@ type Props = {
 };
 const SandwichStack = ({ todaySandwich, isPerfect }: Props) => {
   return (
-    <div>
-      {isPerfect ? <div>top bread</div> : null}
+    <div className={styles.stackContainer}>
       {todaySandwich.habits
         .filter((v) => v.completed === true)
         .map((v) => {
-          return <div>{v.ingredient}</div>;
+          return (
+            <div className={styles.items} key={v.habitId}>
+              {v.ingredient}
+            </div>
+          );
         })}
+      {isPerfect ? <div className={styles.items}>top bread</div> : null}
     </div>
   );
 };

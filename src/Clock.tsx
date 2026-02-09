@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import styles from "./Clock.module.css";
 
 const formatTime = (date: Date) =>
   date.toLocaleDateString("en-US", {
@@ -17,6 +18,6 @@ const Clock = () => {
     return () => clearInterval(id);
   }, []);
 
-  return <div>{time}</div>;
+  return <div className={styles.clock}>{time}</div>;
 };
 export default Clock;
