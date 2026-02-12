@@ -1,10 +1,10 @@
 import { useEffect, useMemo, useState } from "react";
-import type { Habit, TodaySandwich, DaySandwich } from "./types";
-import CreatePopup from "./CreatePopup";
-import Clock from "./Clock";
-import SandwichStack from "./SandwichStack";
-import styles from "./Main.module.css";
+import type { Habit, TodaySandwich, DaySandwich } from "../types/types";
+import CreatePopup from "../components/CreatePopup";
+import Clock from "../components/Clock";
+import SandwichStack from "../components/SandwichStack";
 
+import styles from "../styles/Main.module.css";
 const TODAY_SANDWICH_KEY = "todaySandwich";
 
 const getTodayDate = () => new Date().toLocaleDateString("sv-SE");
@@ -57,7 +57,9 @@ const Main = () => {
         if (stored?.date === today) {
           return buildTodaySandwich(today, habits, stored);
         }
-      } catch {}
+      } catch {
+        console.warn("failed!");
+      }
     }
     return buildTodaySandwich(today, habits);
   });
@@ -73,7 +75,7 @@ const Main = () => {
     };
   }, [todaySandwich]);
   // ===========================================================================
-  //
+  // 날짜감지
   // ===========================================================================
   const [todayDate, setTodayDate] = useState(getTodayDate());
   useEffect(() => {
@@ -87,7 +89,7 @@ const Main = () => {
       if (todaySandwich.date === nextDate) return;
 
       // 어제 todaySandwich를 sandwichHistory에 저장하고
-      // 새로운 todaySandwich를 생성 (같은 스냅샷 기준)
+      // 새로운 todaySandwich를 생성
       setTodaySandwich((prevToday) => {
         const completedCount = prevToday.habits.filter(
           (v) => v.completed
@@ -164,7 +166,13 @@ const Main = () => {
     setTodaySandwich((prev) => ({
       ...prev,
       habits: prev.habits.map((habit) =>
-        habit.habitId === id ? { ...habit, completed: !habit.completed } : habit
+        habit.habitId === id
+          ? {
+              ...habit,
+              completed: !habit.completed,
+              completedTime: new Date().getTime(),
+            }
+          : habit
       ),
     }));
   };
@@ -181,7 +189,9 @@ const Main = () => {
         todaySandwich={todaySandwich}
         isPerfect={daySandwich.perfect}
       ></SandwichStack>
-      <button onClick={onClickToCreate}>Create new habit</button>
+      <button className={styles.createButton} onClick={onClickToCreate}>
+        Create new habit
+      </button>
       {isCreateOpen ? (
         <CreatePopup
           onCreateHabit={onCreateHabit}
@@ -200,7 +210,7 @@ const Main = () => {
                 }}
               >
                 {todaySandwich.habits.find((v) => v.habitId == habit.id)
-                  .completed
+                  ?.completed
                   ? "■"
                   : "□"}
               </button>

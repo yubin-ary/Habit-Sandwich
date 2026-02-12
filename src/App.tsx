@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Main from "./Main";
-import Onboarding from "./Onboarding";
+import Main from "./pages/Main";
+import Onboarding from "./pages/Onboarding";
 
 function App() {
   const [userName, setUserName] = useState(() => {

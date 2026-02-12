@@ -8,8 +8,10 @@
   font-weight: 800;
   margin: 0;
 }
-.list {
+.list li {
+  list-style-type: none;
 }
+
 .list button {
   background: none;
   border: none;
@@ -17,4 +19,11 @@
   font: inherit;
   color: inherit;
   cursor: pointer;
+}
+.createButton {
+  margin: auto;
+
+  width: 90%;
+  max-width: ;
+  aspect-ratio: 18/1;
 }
