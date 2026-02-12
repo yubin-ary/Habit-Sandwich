@@ -166,7 +166,13 @@ const Main = () => {
     setTodaySandwich((prev) => ({
       ...prev,
       habits: prev.habits.map((habit) =>
-        habit.habitId === id ? { ...habit, completed: !habit.completed } : habit
+        habit.habitId === id
+          ? {
+              ...habit,
+              completed: !habit.completed,
+              completedTime: new Date().getTime(),
+            }
+          : habit
       ),
     }));
   };
@@ -183,7 +189,9 @@ const Main = () => {
         todaySandwich={todaySandwich}
         isPerfect={daySandwich.perfect}
       ></SandwichStack>
-      <button onClick={onClickToCreate}>Create new habit</button>
+      <button className={styles.createButton} onClick={onClickToCreate}>
+        Create new habit
+      </button>
       {isCreateOpen ? (
         <CreatePopup
           onCreateHabit={onCreateHabit}

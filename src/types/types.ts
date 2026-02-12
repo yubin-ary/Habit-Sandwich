@@ -9,6 +9,7 @@ export type TodaySandwich = {
     habitId: string;
     habitTitle?: string;
     completed: boolean;
+    completedTime?: number;
     ingredient: string;
   }[];
 };
@@ -17,6 +18,7 @@ export type DaySandwich = {
   habits: {
     habitId: string;
     completed: boolean;
+    completedTime?: number;
     ingredient: string;
   }[];
   perfect: boolean;
@@ -43,6 +45,7 @@ export type fcstItems = {
   fcstDate: string;
   fcstTime: string;
   fcstValue: string;
+  obsrValue?: string;
   nx: string;
   ny: string;
 };

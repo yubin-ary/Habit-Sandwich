@@ -6,6 +6,7 @@ type Props = {
       habitId: string;
       habitTitle?: string;
       completed: boolean;
+      completedTime?: number;
       ingredient: string;
     }[];
   };
@@ -16,6 +17,7 @@ const SandwichStack = ({ todaySandwich, isPerfect }: Props) => {
     <div className={styles.stackContainer}>
       {todaySandwich.habits
         .filter((v) => v.completed === true)
+        .sort((a, b) => Number(a.completedTime) - Number(b.completedTime))
         .map((v) => {
           return (
             <div className={styles.items} key={v.habitId}>
