@@ -176,48 +176,61 @@ const Main = () => {
       ),
     }));
   };
+  // ===========================================================================
+  //  날씨
+  // ===========================================================================
 
   return (
     <div className={styles.container}>
-      <Clock></Clock>
-
-      <h2 className={styles.title}>
-        {localStorage.getItem("name")}'s Sandwich 🥪
+      <div className={styles.appHeader}>
+        <h2 className={styles.title}>Have it Sandwich 🥪</h2>
+      </div>
+      <h2 className={styles.welcome}>
+        Welcome, {localStorage.getItem("name")} ! Today is <Clock></Clock>.
       </h2>
 
       <SandwichStack
         todaySandwich={todaySandwich}
         isPerfect={daySandwich.perfect}
       ></SandwichStack>
-      <button className={styles.createButton} onClick={onClickToCreate}>
-        Create new habit
-      </button>
-      {isCreateOpen ? (
-        <CreatePopup
-          onCreateHabit={onCreateHabit}
-          onClosePopup={onClosePopup}
-        ></CreatePopup>
-      ) : null}
-      <ul className={styles.list}>
-        {habits.map((habit) => {
-          return (
-            <li key={habit.id}>
-              {habit.title} - {habit.ingredient}
-              <button
-                key={habit.id}
-                onClick={() => {
-                  onToggleDone(habit.id);
-                }}
-              >
-                {todaySandwich.habits.find((v) => v.habitId == habit.id)
-                  ?.completed
-                  ? "■"
-                  : "□"}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+
+      <div className={styles.todoContainer}>
+        <div className={styles.todoHeader}>
+          <div className={styles.todoText}>Todo</div>
+          <button className={styles.createButton} onClick={onClickToCreate}>
+            Create new habit
+          </button>
+        </div>
+        {isCreateOpen ? (
+          <CreatePopup
+            onCreateHabit={onCreateHabit}
+            onClosePopup={onClosePopup}
+          ></CreatePopup>
+        ) : null}
+        <ul className={styles.list}>
+          {habits.map((habit) => {
+            const isCompleted =
+              todaySandwich.habits.find((v) => v.habitId === habit.id)
+                ?.completed ?? false;
+            return (
+              <li key={habit.id}>
+                {habit.title} - {habit.ingredient}
+                <button
+                  type="button"
+                  className={`${styles.todoToggleButton} ${
+                    isCompleted ? styles.todoToggleOn : styles.todoToggleOff
+                  }`}
+                  onClick={() => {
+                    onToggleDone(habit.id);
+                  }}
+                >
+                  {isCompleted ? "완료" : "미완료"}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 };
