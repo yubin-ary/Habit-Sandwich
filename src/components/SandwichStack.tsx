@@ -1,4 +1,11 @@
 import styles from "../styles/SandwichStack.module.css";
+import bread from "../asset/bread.png";
+import cheese from "../asset/cheese.png";
+import ham from "../asset/ham.png";
+import lettuce from "../asset/lettuce.png";
+import tomato from "../asset/tomato.png";
+import onion from "../asset/onion.png";
+
 type Props = {
   todaySandwich: {
     date: string;
@@ -12,6 +19,14 @@ type Props = {
   };
   isPerfect: boolean;
 };
+const ingredientImageMap: Record<string, string> = {
+  bread,
+  cheese,
+  ham,
+  lettuce,
+  tomato,
+  onion,
+};
 const SandwichStack = ({ todaySandwich, isPerfect }: Props) => {
   return (
     <div className={styles.stackContainer}>
@@ -21,7 +36,10 @@ const SandwichStack = ({ todaySandwich, isPerfect }: Props) => {
         .map((v) => {
           return (
             <div className={styles.items} key={v.habitId}>
-              {v.ingredient}
+              <div className={styles.imgContainer}>
+                <img src={ingredientImageMap[v.ingredient]}></img>
+              </div>
+              <div className={styles.habitTitle}>{v.habitTitle}</div>
             </div>
           );
         })}

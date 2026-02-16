@@ -185,7 +185,12 @@ const CreatePopup = ({ onCreateHabit, onClosePopup }: Props) => {
           <button className={styles.backButton} onClick={onClose}>
             Cancel
           </button>
-          <button className={styles.saveButton} onClick={onClick}>
+          <button
+            className={`${styles.saveButton} ${
+              title !== "" && ingredient !== "" ? styles.saveActive : ""
+            } `}
+            onClick={onClick}
+          >
             Save
           </button>
         </div>

@@ -5,11 +5,39 @@
   width: 90%;
   max-width: 600px;
   aspect-ratio: 1/1;
-  height: ;
+  position: relative;
   margin: auto;
   flex-direction: column-reverse;
 }
 .items {
+  display: flex;
+  position: relative;
+  align-items: center;
+  width: 100%;
+
   margin: 0 auto 0 auto;
   border: 1px solid grey;
+}
+
+.items img {
+  width: 40%;
+  margin: auto;
+  min-width: 188px;
+}
+.items .imgContainer {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  border: 2px solid blue;
+}
+.items .habitTitle {
+  position: absolute;
+  text-align: left;
+  left: 70%;
+  width: 30%;
+
+  border: 2px solid red;
+}
+.items .habitTitle :hover {
+  opacity: 1;
 }

@@ -93,3 +93,9 @@
   font-size: 1.2rem;
   font-weight: 700;
 }
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid grey;
+}

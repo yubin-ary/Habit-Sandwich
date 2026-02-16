@@ -144,6 +144,7 @@ const Main = () => {
         ...prev.habits,
         {
           habitId: newHabit.id,
+          habitTitle: newHabit.title,
           ingredient: newHabit.ingredient,
           completed: false,
         },
@@ -188,11 +189,12 @@ const Main = () => {
       <h2 className={styles.welcome}>
         Welcome, {localStorage.getItem("name")} ! Today is <Clock></Clock>.
       </h2>
-
-      <SandwichStack
-        todaySandwich={todaySandwich}
-        isPerfect={daySandwich.perfect}
-      ></SandwichStack>
+      <div className={styles.page}>
+        <SandwichStack
+          todaySandwich={todaySandwich}
+          isPerfect={daySandwich.perfect}
+        ></SandwichStack>
+      </div>
 
       <div className={styles.todoContainer}>
         <div className={styles.todoHeader}>
