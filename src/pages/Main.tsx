@@ -6,6 +6,21 @@ import SandwichStack from "../components/SandwichStack";
 
 import styles from "../styles/Main.module.css";
 const TODAY_SANDWICH_KEY = "todaySandwich";
+import bread from "../asset/bread.png";
+import cheese from "../asset/cheese.png";
+import ham from "../asset/ham.png";
+import lettuce from "../asset/lettuce.png";
+import tomato from "../asset/tomato.png";
+import onion from "../asset/onion.png";
+
+const ingredientImageMap: Record<string, string> = {
+  bread,
+  cheese,
+  ham,
+  lettuce,
+  tomato,
+  onion,
+};
 
 const getTodayDate = () => new Date().toLocaleDateString("sv-SE");
 
@@ -63,6 +78,7 @@ const Main = () => {
     }
     return buildTodaySandwich(today, habits);
   });
+
   const daySandwich = useMemo<DaySandwich>(() => {
     const completedCount = todaySandwich.habits.filter(
       (v) => v.completed
@@ -214,7 +230,7 @@ const Main = () => {
         <div className={styles.todoHeader}>
           <div className={styles.todoText}>Todo</div>
           <button className={styles.createButton} onClick={onClickToCreate}>
-            Create new habit
+            +
           </button>
         </div>
         {isCreateOpen ? (
@@ -230,7 +246,13 @@ const Main = () => {
                 ?.completed ?? false;
             return (
               <li key={habit.id}>
-                {habit.title}
+                <div>
+                  <img
+                    className={styles.bullets}
+                    src={ingredientImageMap[habit.ingredient]}
+                  ></img>
+                  {habit.title}
+                </div>
                 <button
                   type="button"
                   className={`${styles.todoToggleButton} ${
@@ -240,7 +262,7 @@ const Main = () => {
                     onToggleDone(habit.id);
                   }}
                 >
-                  {isCompleted ? "완료" : "미완료"}
+                  {isCompleted ? "✔" : ""}
                 </button>
               </li>
             );
