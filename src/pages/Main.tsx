@@ -74,6 +74,20 @@ const Main = () => {
         completedCount === todaySandwich.habits.length,
     };
   }, [todaySandwich]);
+
+  const sortedHabits = useMemo(() => {
+    return [...habits].sort((a, b) => {
+      const aCompleted =
+        todaySandwich.habits.find((v) => v.habitId === a.id)?.completed ??
+        false;
+      const bCompleted =
+        todaySandwich.habits.find((v) => v.habitId === b.id)?.completed ??
+        false;
+
+      if (aCompleted === bCompleted) return 0;
+      return aCompleted ? 1 : -1;
+    });
+  }, [habits, todaySandwich.habits]);
   // ===========================================================================
   // 날짜감지
   // ===========================================================================
@@ -184,10 +198,10 @@ const Main = () => {
   return (
     <div className={styles.container}>
       <div className={styles.appHeader}>
-        <h2 className={styles.title}>Have it Sandwich 🥪</h2>
+        <h2 className={styles.title}>Have it Sandwich 🥪</h2> <Clock></Clock>
       </div>
       <h2 className={styles.welcome}>
-        Welcome, {localStorage.getItem("name")} ! Today is <Clock></Clock>.
+        Welcome, {localStorage.getItem("name")} !
       </h2>
       <div className={styles.page}>
         <SandwichStack
@@ -210,13 +224,13 @@ const Main = () => {
           ></CreatePopup>
         ) : null}
         <ul className={styles.list}>
-          {habits.map((habit) => {
+          {sortedHabits.map((habit) => {
             const isCompleted =
               todaySandwich.habits.find((v) => v.habitId === habit.id)
                 ?.completed ?? false;
             return (
               <li key={habit.id}>
-                {habit.title} - {habit.ingredient}
+                {habit.title}
                 <button
                   type="button"
                   className={`${styles.todoToggleButton} ${

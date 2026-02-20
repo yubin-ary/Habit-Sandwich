@@ -1,22 +1,21 @@
 .stackContainer {
   display: flex;
   flex: 1;
-  border: 2px solid black;
+
   width: 90%;
   max-width: 600px;
-  aspect-ratio: 1/1;
+  min-height: 100px;
   position: relative;
-  margin: auto;
+  margin: 20% auto 0 auto;
   flex-direction: column-reverse;
 }
 .items {
   display: flex;
-  position: relative;
+  position: absolute;
   align-items: center;
   width: 100%;
 
   margin: 0 auto 0 auto;
-  border: 1px solid grey;
 }
 
 .items img {
@@ -28,16 +27,22 @@
   display: flex;
   flex: 1;
   align-items: center;
-  border: 2px solid blue;
 }
 .items .habitTitle {
   position: absolute;
   text-align: left;
   left: 70%;
   width: 30%;
-
+  opacity: 0;
   border: 2px solid red;
 }
-.items .habitTitle :hover {
-  opacity: 1;
+.items:hover .habitTitle {
+  opacity: 0;
+}
+.bread {
+  position: absolute;
+  bottom: 0;
+}
+.topbread {
+  position: absolute;
 }
