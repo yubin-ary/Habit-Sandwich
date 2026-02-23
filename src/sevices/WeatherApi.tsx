@@ -40,14 +40,14 @@ const getBaseHour = (): string => {
   let hour = String(new Date().getHours());
   const minute = String(new Date().getMinutes());
   if (Number(minute) >= 30) {
-    return hour + "30";
+    return hour.padStart(2, "0") + "30";
   } else {
     hour = String(Number(hour) - 1);
-    return hour + "30";
+    return hour.padStart(2, "0") + "30";
   }
 };
 async function getXY(lat: number, lon: number): Promise<string[] | undefined> {
-  const XY_API_URL: string = `https://apihub.kma.go.kr/api/typ01/cgi-bin/url/nph-dfs_xy_lonlat?lon=${lon}&lat=${lat}&help=0&authKey=aqS254aBTp-ktueGge6fkg`;
+  const XY_API_URL: string = `/kma/api/typ01/cgi-bin/url/nph-dfs_xy_lonlat?lon=${lon}&lat=${lat}&help=0&authKey=aqS254aBTp-ktueGge6fkg`;
   try {
     const data: string | undefined = await xyRequest(XY_API_URL);
     if (data) {
@@ -65,15 +65,18 @@ async function urlMaker(
   nx: number,
   ny: number
 ): Promise<string[]> {
-  const url = `https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtFcst?pageNo=1&numOfRows=30&dataType=json&base_date=${fullDate}&base_time=${baseHour}&nx=${nx}&ny=${ny}&authKey=aqS254aBTp-ktueGge6fkg`;
+  const url = `/kma/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtFcst?pageNo=1&numOfRows=30&dataType=json&base_date=${fullDate}&base_time=${baseHour}&nx=${nx}&ny=${ny}&authKey=aqS254aBTp-ktueGge6fkg`;
 
-  const url2 = `https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?pageNo=1&numOfRows=5&dataType=JSON&base_date=${fullDate}&base_time=${
-    String(new Date().getHours).padStart(2, "0") + "00"
+  const url2 = `/kma/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?pageNo=1&numOfRows=5&dataType=JSON&base_date=${fullDate}&base_time=${
+    String(new Date().getHours()).padStart(2, "0") + "00"
   }&nx=${nx}&ny=${ny}&authKey=aqS254aBTp-ktueGge6fkg`;
 
   return [url, url2];
 }
-const getSkyData = async (url: string, baseHour: string) => {
+const getSkyData = async (
+  url: string,
+  baseHour: string
+): Promise<string | undefined> => {
   try {
     const response1: WeatherApiResponse | undefined = await dataRequest(url);
     if (!response1) return;
@@ -90,25 +93,26 @@ const getSkyData = async (url: string, baseHour: string) => {
     return;
   }
 };
-const getPtyData = async (url2: string, baseHour: string) => {
+const getPtyData = async (
+  url2: string,
+  baseHour: string
+): Promise<string | undefined> => {
   try {
     const response2: WeatherApiResponse | undefined = await dataRequest(url2);
     if (!response2) return;
-    const data = response2.response.body.items.item
-      .filter((elm) => {
-        if (!baseHour) return;
-        return elm.fcstTime == `${Number(baseHour.slice(0, 2)) + 1}00`;
-      })
-      .filter((v) => {
-        return v.category == "PTY";
-      });
+    const data = response2.response.body.items.item.filter((v) => {
+      return v.category == "PTY";
+    });
     return data[0].obsrValue;
   } catch {
     return;
   }
 };
 
-const WeatherApi = async (lat: number, lon: number) => {
+const WeatherApi = async (
+  lat: number,
+  lon: number
+): Promise<[string | undefined, string | undefined] | undefined> => {
   const fullDate: number = getFullDate();
   const baseHour: string = getBaseHour();
 
@@ -141,7 +145,8 @@ const WeatherApi = async (lat: number, lon: number) => {
   //   pty 강수상태
   // =============================================================================
   const PTY = getPtyData(url2, baseHour);
-  return [SKY, PTY];
+  const [sky, pty] = await Promise.all([SKY, PTY]);
+  return [sky, pty];
 
   /* const response2 = await dataRequest(url2);
   let ptyData;

@@ -3,7 +3,7 @@ import type { Habit, TodaySandwich, DaySandwich } from "../types/types";
 import CreatePopup from "../components/CreatePopup";
 import Clock from "../components/Clock";
 import SandwichStack from "../components/SandwichStack";
-
+import WeatherProvider from "../components/weather/WeatherProvider";
 import styles from "../styles/Main.module.css";
 const TODAY_SANDWICH_KEY = "todaySandwich";
 import bread from "../asset/bread.png";
@@ -219,6 +219,7 @@ const Main = () => {
       <h2 className={styles.welcome}>
         Welcome, {localStorage.getItem("name")} !
       </h2>
+      <WeatherProvider></WeatherProvider>
       <div className={styles.page}>
         <SandwichStack
           todaySandwich={todaySandwich}
