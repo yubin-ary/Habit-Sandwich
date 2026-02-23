@@ -1,29 +1,117 @@
 .container {
   display: flex;
   flex-direction: column;
+  margin: 0;
   gap: 1rem;
 }
+.appHeader {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  height: 30px;
+  padding-left: 5px;
+  padding-right: 5px;
+}
 .title {
-  font-size: 1.5rem;
-  font-weight: 800;
+  font-size: 1rem;
+  font-weight: 600;
   margin: 0;
 }
-.list li {
-  list-style-type: none;
+.welcome {
+  display: flex;
+  margin: auto;
+  font-size: 1.2rem;
+  font-weight: 800;
 }
 
-.list button {
-  background: none;
-  border: none;
-  padding: 0;
-  font: inherit;
-  color: inherit;
+.todoToggleButton {
+  min-width: 25px;
+  height: 25px;
+  border-radius: 999px;
+  border: 1px solid transparent;
+  font-size: clamp(12px, 1.8vw, 14px);
+  font-weight: 700;
   cursor: pointer;
+  transition: background-color 0.2s ease, color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.todoToggleOn {
+  background-color: #222;
+  color: #fff;
+  border-color: #222;
+}
+
+.todoToggleOff {
+  background-color: #fff;
+  color: #444;
+  border-color: #bbb;
 }
 .createButton {
+  width: 50px;
+  aspect-ratio: 1/1;
+  margin-right: 10px;
+  border-radius: 999px;
+  border: none;
+}
+.todoContainer {
+  display: flex;
+
+  width: 90%;
+  flex-direction: column;
+
   margin: auto;
 
   width: 90%;
-  max-width: ;
-  aspect-ratio: 18/1;
+  max-width: 600px;
+  border: 2px solid orange;
+}
+.todoContainer li {
+  list-style-type: none;
+  display: flex;
+
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  padding: 0 12px;
+  text-align: left;
+  font-size: clamp(15px, 2.4vw, 21px);
+  border: 1px solid black;
+  border-radius: 999px;
+  margin-bottom: 10px;
+  width: 100%;
+
+  min-height: 40px;
+}
+.todoContainer ul {
+  padding-left: 0;
+  width: 100%;
+}
+.todoContainer .todoHeader {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 3%;
+  justify-items: center;
+  justify-content: space-between;
+}
+.todoText {
+  display: flex;
+  margin-left: 10px;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.bullets {
+  max-width: 40px;
+  width: 100%;
+}
+li div:first-child {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
 }

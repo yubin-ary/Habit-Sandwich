@@ -1,3 +1,8 @@
 .clock {
+  display: flex;
+  align-items: center;
   font-size: 0.8rem;
+  font-weight: 300;
+  margin: 0;
+  color: grey;
 }

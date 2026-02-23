@@ -6,6 +6,21 @@ import SandwichStack from "../components/SandwichStack";
 
 import styles from "../styles/Main.module.css";
 const TODAY_SANDWICH_KEY = "todaySandwich";
+import bread from "../asset/bread.png";
+import cheese from "../asset/cheese.png";
+import ham from "../asset/ham.png";
+import lettuce from "../asset/lettuce.png";
+import tomato from "../asset/tomato.png";
+import onion from "../asset/onion.png";
+
+const ingredientImageMap: Record<string, string> = {
+  bread,
+  cheese,
+  ham,
+  lettuce,
+  tomato,
+  onion,
+};
 
 const getTodayDate = () => new Date().toLocaleDateString("sv-SE");
 
@@ -63,6 +78,7 @@ const Main = () => {
     }
     return buildTodaySandwich(today, habits);
   });
+
   const daySandwich = useMemo<DaySandwich>(() => {
     const completedCount = todaySandwich.habits.filter(
       (v) => v.completed
@@ -74,6 +90,20 @@ const Main = () => {
         completedCount === todaySandwich.habits.length,
     };
   }, [todaySandwich]);
+
+  const sortedHabits = useMemo(() => {
+    return [...habits].sort((a, b) => {
+      const aCompleted =
+        todaySandwich.habits.find((v) => v.habitId === a.id)?.completed ??
+        false;
+      const bCompleted =
+        todaySandwich.habits.find((v) => v.habitId === b.id)?.completed ??
+        false;
+
+      if (aCompleted === bCompleted) return 0;
+      return aCompleted ? 1 : -1;
+    });
+  }, [habits, todaySandwich.habits]);
   // ===========================================================================
   // 날짜감지
   // ===========================================================================
@@ -144,6 +174,7 @@ const Main = () => {
         ...prev.habits,
         {
           habitId: newHabit.id,
+          habitTitle: newHabit.title,
           ingredient: newHabit.ingredient,
           completed: false,
         },
@@ -176,48 +207,68 @@ const Main = () => {
       ),
     }));
   };
+  // ===========================================================================
+  //  날씨
+  // ===========================================================================
 
   return (
     <div className={styles.container}>
-      <Clock></Clock>
-
-      <h2 className={styles.title}>
-        {localStorage.getItem("name")}'s Sandwich 🥪
+      <div className={styles.appHeader}>
+        <h2 className={styles.title}>Have it Sandwich 🥪</h2> <Clock></Clock>
+      </div>
+      <h2 className={styles.welcome}>
+        Welcome, {localStorage.getItem("name")} !
       </h2>
+      <div className={styles.page}>
+        <SandwichStack
+          todaySandwich={todaySandwich}
+          isPerfect={daySandwich.perfect}
+        ></SandwichStack>
+      </div>
 
-      <SandwichStack
-        todaySandwich={todaySandwich}
-        isPerfect={daySandwich.perfect}
-      ></SandwichStack>
-      <button className={styles.createButton} onClick={onClickToCreate}>
-        Create new habit
-      </button>
-      {isCreateOpen ? (
-        <CreatePopup
-          onCreateHabit={onCreateHabit}
-          onClosePopup={onClosePopup}
-        ></CreatePopup>
-      ) : null}
-      <ul className={styles.list}>
-        {habits.map((habit) => {
-          return (
-            <li key={habit.id}>
-              {habit.title} - {habit.ingredient}
-              <button
-                key={habit.id}
-                onClick={() => {
-                  onToggleDone(habit.id);
-                }}
-              >
-                {todaySandwich.habits.find((v) => v.habitId == habit.id)
-                  ?.completed
-                  ? "■"
-                  : "□"}
-              </button>
-            </li>
-          );
-        })}
-      </ul>
+      <div className={styles.todoContainer}>
+        <div className={styles.todoHeader}>
+          <div className={styles.todoText}>Todo</div>
+          <button className={styles.createButton} onClick={onClickToCreate}>
+            +
+          </button>
+        </div>
+        {isCreateOpen ? (
+          <CreatePopup
+            onCreateHabit={onCreateHabit}
+            onClosePopup={onClosePopup}
+          ></CreatePopup>
+        ) : null}
+        <ul className={styles.list}>
+          {sortedHabits.map((habit) => {
+            const isCompleted =
+              todaySandwich.habits.find((v) => v.habitId === habit.id)
+                ?.completed ?? false;
+            return (
+              <li key={habit.id}>
+                <div>
+                  <img
+                    className={styles.bullets}
+                    src={ingredientImageMap[habit.ingredient]}
+                  ></img>
+                  {habit.title}
+                </div>
+                <button
+                  type="button"
+                  className={`${styles.todoToggleButton} ${
+                    isCompleted ? styles.todoToggleOn : styles.todoToggleOff
+                  }`}
+                  onClick={() => {
+                    onToggleDone(habit.id);
+                  }}
+                >
+                  {isCompleted ? "✔" : ""}
+                </button>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
     </div>
   );
 };

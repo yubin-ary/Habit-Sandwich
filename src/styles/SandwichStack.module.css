@@ -1,15 +1,48 @@
 .stackContainer {
   display: flex;
   flex: 1;
-  border: 2px solid black;
+
   width: 90%;
   max-width: 600px;
-  aspect-ratio: 1/1;
-  height: ;
-  margin: auto;
+  min-height: 100px;
+  position: relative;
+  margin: 20% auto 0 auto;
   flex-direction: column-reverse;
 }
 .items {
+  display: flex;
+  position: absolute;
+  align-items: center;
+  width: 100%;
+
   margin: 0 auto 0 auto;
-  border: 1px solid grey;
+}
+
+.items img {
+  width: 40%;
+  margin: auto;
+  min-width: 188px;
+}
+.items .imgContainer {
+  display: flex;
+  flex: 1;
+  align-items: center;
+}
+.items .habitTitle {
+  position: absolute;
+  text-align: left;
+  left: 70%;
+  width: 30%;
+  opacity: 0;
+  border: 2px solid red;
+}
+.items:hover .habitTitle {
+  opacity: 0;
+}
+.bread {
+  position: absolute;
+  bottom: 0;
+}
+.topbread {
+  position: absolute;
 }
