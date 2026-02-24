@@ -208,8 +208,15 @@ const Main = () => {
     }));
   };
   // ===========================================================================
-  //  날씨
+  //  습관 삭제 버튼
   // ===========================================================================
+  const onDelete = (habitId: string) => {
+    setTodaySandwich((prev) => ({
+      ...prev,
+      habits: prev.habits.filter((habit) => habit.habitId !== habitId),
+    }));
+    setHabits((prev) => prev.filter((v) => v.id !== habitId));
+  };
 
   return (
     <div className={styles.container}>
@@ -248,6 +255,12 @@ const Main = () => {
             return (
               <li key={habit.id}>
                 <div>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      onDelete(habit.id);
+                    }}
+                  ></button>
                   <img
                     className={styles.bullets}
                     src={ingredientImageMap[habit.ingredient]}
