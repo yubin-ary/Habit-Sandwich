@@ -1,5 +1,10 @@
 import { useState } from "react";
 import styles from "../styles/CreatePopup.module.css";
+import cheese from "../asset/cheese.png";
+import ham from "../asset/ham.png";
+import lettuce from "../asset/lettuce.png";
+import onion from "../asset/onion.png";
+import tomato from "../asset/tomato.png";
 type Props = {
   onCreateHabit: (title: string, ingredient: string) => void;
   onClosePopup: () => void;
@@ -42,6 +47,7 @@ const CreatePopup = ({ onCreateHabit, onClosePopup }: Props) => {
             onClick={onChangeIngredient}
             value="cheese"
           >
+            <img className={styles.thumbnail} src={cheese}></img>
             cheese
           </button>
           <button
@@ -51,6 +57,7 @@ const CreatePopup = ({ onCreateHabit, onClosePopup }: Props) => {
             onClick={onChangeIngredient}
             value="ham"
           >
+            <img className={styles.thumbnail} src={ham}></img>
             ham
           </button>
           <button
@@ -60,6 +67,7 @@ const CreatePopup = ({ onCreateHabit, onClosePopup }: Props) => {
             onClick={onChangeIngredient}
             value="tomato"
           >
+            <img className={styles.thumbnail} src={tomato}></img>
             tomato
           </button>
           <button
@@ -69,6 +77,7 @@ const CreatePopup = ({ onCreateHabit, onClosePopup }: Props) => {
             onClick={onChangeIngredient}
             value="lettuce"
           >
+            <img className={styles.thumbnail} src={lettuce}></img>
             lettuce
           </button>
           <button
@@ -78,6 +87,7 @@ const CreatePopup = ({ onCreateHabit, onClosePopup }: Props) => {
             onClick={onChangeIngredient}
             value="onion"
           >
+            <img className={styles.thumbnail} src={onion}></img>
             onion
           </button>
           <button

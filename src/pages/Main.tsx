@@ -1,9 +1,8 @@
 import { useEffect, useMemo, useState } from "react";
 import type { Habit, TodaySandwich, DaySandwich } from "../types/types";
-import CreatePopup from "../components/CreatePopup";
 import Clock from "../components/Clock";
 import SandwichStack from "../components/SandwichStack";
-import WeatherProvider from "../components/weather/WeatherProvider";
+import Todolist from "../components/Todolist";
 import styles from "../styles/Main.module.css";
 const TODAY_SANDWICH_KEY = "todaySandwich";
 import bread from "../asset/bread.png";
@@ -226,7 +225,7 @@ const Main = () => {
       <h2 className={styles.welcome}>
         Welcome, {localStorage.getItem("name")} !
       </h2>
-      <WeatherProvider></WeatherProvider>
+
       <div className={styles.page}>
         <SandwichStack
           todaySandwich={todaySandwich}
@@ -234,55 +233,18 @@ const Main = () => {
         ></SandwichStack>
       </div>
 
-      <div className={styles.todoContainer}>
-        <div className={styles.todoHeader}>
-          <div className={styles.todoText}>Todo</div>
-          <button className={styles.createButton} onClick={onClickToCreate}>
-            +
-          </button>
-        </div>
-        {isCreateOpen ? (
-          <CreatePopup
-            onCreateHabit={onCreateHabit}
-            onClosePopup={onClosePopup}
-          ></CreatePopup>
-        ) : null}
-        <ul className={styles.list}>
-          {sortedHabits.map((habit) => {
-            const isCompleted =
-              todaySandwich.habits.find((v) => v.habitId === habit.id)
-                ?.completed ?? false;
-            return (
-              <li key={habit.id}>
-                <div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onDelete(habit.id);
-                    }}
-                  ></button>
-                  <img
-                    className={styles.bullets}
-                    src={ingredientImageMap[habit.ingredient]}
-                  ></img>
-                  {habit.title}
-                </div>
-                <button
-                  type="button"
-                  className={`${styles.todoToggleButton} ${
-                    isCompleted ? styles.todoToggleOn : styles.todoToggleOff
-                  }`}
-                  onClick={() => {
-                    onToggleDone(habit.id);
-                  }}
-                >
-                  {isCompleted ? "✔" : ""}
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-      </div>
+      <Todolist
+        styles={styles}
+        isCreateOpen={isCreateOpen}
+        onClickToCreate={onClickToCreate}
+        onCreateHabit={onCreateHabit}
+        onClosePopup={onClosePopup}
+        sortedHabits={sortedHabits}
+        todaySandwich={todaySandwich}
+        ingredientImageMap={ingredientImageMap}
+        onDelete={onDelete}
+        onToggleDone={onToggleDone}
+      />
     </div>
   );
 };
