@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useContext, useEffect, useMemo, useState } from "react";
 import type { Habit, TodaySandwich, DaySandwich } from "../types/types";
 import Clock from "../components/Clock";
 import SandwichStack from "../components/SandwichStack";
@@ -11,6 +11,8 @@ import ham from "../asset/ham.png";
 import lettuce from "../asset/lettuce.png";
 import tomato from "../asset/tomato.png";
 import onion from "../asset/onion.png";
+import { weatherContext } from "../components/weather/WeatherProvider";
+import { WeatherBackground } from "../components/WeatherBackground";
 
 const ingredientImageMap: Record<string, string> = {
   bread,
@@ -43,6 +45,7 @@ const buildTodaySandwich = (
 };
 
 const Main = () => {
+  const weather = useContext(weatherContext);
   const [habits, setHabits] = useState<Habit[]>(
     JSON.parse(localStorage.getItem("habits") ?? "[]")
   );
@@ -222,6 +225,7 @@ const Main = () => {
       <div className={styles.appHeader}>
         <h2 className={styles.title}>Have it Sandwich 🥪</h2> <Clock></Clock>
       </div>
+      <WeatherBackground weather={weather} />
       <h2 className={styles.welcome}>
         Welcome, {localStorage.getItem("name")} !
       </h2>

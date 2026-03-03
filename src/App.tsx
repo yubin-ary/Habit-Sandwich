@@ -1,6 +1,7 @@
 import { useState } from "react";
 import Main from "./pages/Main";
 import Onboarding from "./pages/Onboarding";
+import { WeatherProvider } from "./components/weather/WeatherProvider";
 
 function App() {
   const [userName, setUserName] = useState(() => {
@@ -15,7 +16,9 @@ function App() {
   return (
     <>
       {userName ? (
-        <Main></Main>
+        <WeatherProvider>
+          <Main></Main>
+        </WeatherProvider>
       ) : (
         <Onboarding onNameSet={onNameSet}></Onboarding>
       )}
