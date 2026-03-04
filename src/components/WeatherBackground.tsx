@@ -1,3 +1,8 @@
+import { Rain } from "./weatherComponents/rain";
+import { Cloudy } from "./weatherComponents/Cloudy";
+import { MostlySunny } from "./weatherComponents/MostlySunny";
+import { Sunny } from "./weatherComponents/Sunny";
+import { Snow } from "./weatherComponents/snow";
 type WeatherType =
   | "rain"
   | "snow"
@@ -29,17 +34,17 @@ export const WeatherBackground = ({ weather }: weather) => {
   const nowWeather = getWeatherType(weather.pty, weather.sky);
   switch (nowWeather) {
     case "rain":
-      return 1;
+      return <Rain></Rain>;
     case "snow":
-      return 2;
+      return <Snow></Snow>;
     case "sunny":
-      return 3;
+      return <Sunny></Sunny>;
     case "mostly-sunny":
-      return 4;
+      return <MostlySunny></MostlySunny>;
     case "cloudy":
-      return 5;
+      return <Cloudy></Cloudy>;
     case "default":
-      return 6;
+      return <></>;
   }
   return <></>;
 };
