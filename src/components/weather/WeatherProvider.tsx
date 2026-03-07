@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, createContext, type ReactNode } from "react";
 import WeatherApi from "../../sevices/WeatherApi";
-
-const WeatherProvider = () => {
-  const [weather, setWeather] = useState<{
-    sky?: string;
-    pty?: string;
-  }>({});
+type weatherType = {
+  sky?: string;
+  pty?: string;
+};
+export const weatherContext = createContext<weatherType>({});
+export const WeatherProvider = ({ children }: { children: ReactNode }) => {
+  const [weather, setWeather] = useState<weatherType>({});
 
   useEffect(() => {
     const fallbackLat = 37;
@@ -15,8 +16,6 @@ const WeatherProvider = () => {
       const ans = await WeatherApi(lat, lon);
       const [SKY, PTY] = ans ?? [undefined, undefined];
       setWeather({ sky: SKY, pty: PTY });
-      console.log(SKY);
-      console.log(PTY);
     };
 
     navigator.geolocation.getCurrentPosition(
@@ -36,10 +35,8 @@ const WeatherProvider = () => {
   }, []);
 
   return (
-    <div>
-      {weather.sky} {weather.pty}
-    </div>
+    <weatherContext.Provider value={weather}>
+      {children}
+    </weatherContext.Provider>
   );
 };
-
-export default WeatherProvider;

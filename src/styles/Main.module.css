@@ -32,8 +32,8 @@
   font-size: clamp(12px, 1.8vw, 14px);
   font-weight: 700;
   cursor: pointer;
-  transition: background-color 0.2s ease, color 0.2s ease,
-    border-color 0.2s ease;
+
+  margin-right: 20px -12.5px;
 }
 
 .todoToggleOn {
@@ -41,18 +41,32 @@
   color: #fff;
   border-color: #222;
 }
-
+.todoToggleOff:hover {
+  background-color: #fff;
+  border-color: #bbb;
+  margin-right: 0;
+}
 .todoToggleOff {
   background-color: #fff;
   color: #444;
   border-color: #bbb;
+  margin-right: 0;
 }
 .createButton {
-  width: 50px;
+  width: 40px;
   aspect-ratio: 1/1;
-  margin-right: 10px;
   border-radius: 999px;
   border: none;
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.deleteButton {
+  border: none;
+  background-color: transparent;
+  font-size: large;
+  color: #bbb;
+  cursor: pointer;
 }
 .todoContainer {
   display: flex;
@@ -64,7 +78,6 @@
 
   width: 90%;
   max-width: 600px;
-  border: 2px solid orange;
 }
 .todoContainer li {
   list-style-type: none;
@@ -76,7 +89,7 @@
   padding: 0 12px;
   text-align: left;
   font-size: clamp(15px, 2.4vw, 21px);
-  border: 1px solid black;
+  border: 1px solid #bbb;
   border-radius: 999px;
   margin-bottom: 10px;
   width: 100%;
@@ -112,6 +125,7 @@
 }
 li div:first-child {
   display: flex;
+  align-items: center;
   justify-content: center;
   gap: 10px;
 }
