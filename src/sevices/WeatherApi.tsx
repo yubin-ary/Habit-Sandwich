@@ -1,21 +1,5 @@
 import type { WeatherApiResponse } from "../types/types";
-const xyRequest = async (url: string): Promise<string | undefined> => {
-  try {
-    const response = await fetch(url);
-    if (!response) return undefined;
 
-    const data = await response.text();
-    /*
-            자료형태
-            #START7777
-            #       LON,         LAT,   X,   Y
-            127.000000,   35.000000,  61, 71 
-            */
-    return data;
-  } catch {
-    return undefined;
-  }
-};
 const dataRequest = async (
   url: string
 ): Promise<WeatherApiResponse | undefined> => {
@@ -46,25 +30,63 @@ const getBaseHour = (): string => {
     return hour.padStart(2, "0") + "30";
   }
 };
-async function getXY(lat: number, lon: number): Promise<string[] | undefined> {
-  const XY_API_URL: string = `/kma/api/typ01/cgi-bin/url/nph-dfs_xy_lonlat?lon=${lon}&lat=${lat}&help=0&authKey=aqS254aBTp-ktueGge6fkg`;
-  try {
-    const data: string | undefined = await xyRequest(XY_API_URL);
-    if (data) {
-      const nx = data.split(",")[5].trimStart();
-      const ny = data.split(",")[6].trimStart();
-      return [nx, ny];
-    }
-  } catch {
-    return undefined;
-  }
+const RE = 6371.00877;
+const GRID = 5.0;
+
+const SLAT1 = 30.0;
+const SLAT2 = 60.0;
+const OLON = 126.0;
+const OLAT = 38.0;
+
+const XO = 43;
+const YO = 136;
+
+function getXY(lat: number, lon: number): number[] | undefined {
+  const DEGRAD = Math.PI / 180;
+
+  const re = RE / GRID;
+  const slat1 = SLAT1 * DEGRAD;
+  const slat2 = SLAT2 * DEGRAD;
+  const olon = OLON * DEGRAD;
+  const olat = OLAT * DEGRAD;
+
+  const sn =
+    Math.log(Math.cos(slat1) / Math.cos(slat2)) /
+    Math.log(
+      Math.tan(Math.PI * 0.25 + slat2 * 0.5) /
+        Math.tan(Math.PI * 0.25 + slat1 * 0.5)
+    );
+
+  const sf =
+    (Math.tan(Math.PI * 0.25 + slat1 * 0.5) ** sn * Math.cos(slat1)) / sn;
+
+  const ro = (re * sf) / Math.tan(Math.PI * 0.25 + olat * 0.5) ** sn;
+
+  const ra =
+    (re * sf) /
+    Math.tan(Math.PI * 0.25 + lat * DEGRAD * 0.5 + Math.PI * 0.25) ** sn;
+
+  let theta = lon * DEGRAD - olon;
+
+  if (theta > Math.PI) theta -= 2 * Math.PI;
+  if (theta < -Math.PI) theta += 2 * Math.PI;
+
+  theta *= sn;
+
+  const nx = Math.floor(ra * Math.sin(theta) + XO + 0.5);
+  const ny = Math.floor(ro - ra * Math.cos(theta) + YO + 0.5);
+
+  return [nx, ny];
 }
-async function urlMaker(
+
+/* return [nx, ny]; */
+
+function urlMaker(
   fullDate: number,
   baseHour: string | undefined,
   nx: number,
   ny: number
-): Promise<string[]> {
+): string[] {
   const url = `/kma/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtFcst?pageNo=1&numOfRows=30&dataType=json&base_date=${fullDate}&base_time=${baseHour}&nx=${nx}&ny=${ny}&authKey=aqS254aBTp-ktueGge6fkg`;
 
   const url2 = `/kma/api/typ02/openApi/VilageFcstInfoService_2.0/getUltraSrtNcst?pageNo=1&numOfRows=5&dataType=JSON&base_date=${fullDate}&base_time=${
@@ -123,19 +145,15 @@ const WeatherApi = async (
   // =============================================================================
   // 위도, 경도 기준으로 동네예보 xy 좌표로 바꿔줌
   // =============================================================================
-  const nxny = await getXY(lat, lon);
+  const nxny = getXY(lat, lon);
   if (!nxny) {
     return;
   }
   const [nx, ny] = nxny;
-  const urls = await urlMaker(fullDate, baseHour, Number(nx), Number(ny));
-  if (!urls) {
-    return;
-  }
+  const [url, url2] = urlMaker(fullDate, baseHour, nx, ny);
   // ===========================================================================
   // url 만든다
   // ===========================================================================
-  const [url, url2] = urls;
 
   // ===========================================================================
   // sky 정보 가져옴

@@ -16,8 +16,6 @@ export const WeatherProvider = ({ children }: { children: ReactNode }) => {
       const ans = await WeatherApi(lat, lon);
       const [SKY, PTY] = ans ?? [undefined, undefined];
       setWeather({ sky: SKY, pty: PTY });
-      console.log(SKY);
-      console.log(PTY);
     };
 
     navigator.geolocation.getCurrentPosition(

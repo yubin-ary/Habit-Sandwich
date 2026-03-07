@@ -1,8 +1,8 @@
-import { Rain } from "./weatherComponents/rain";
+import { Rain } from "./weatherComponents/Rain";
 import { Cloudy } from "./weatherComponents/Cloudy";
 import { MostlySunny } from "./weatherComponents/MostlySunny";
 import { Sunny } from "./weatherComponents/Sunny";
-import { Snow } from "./weatherComponents/snow";
+import { Snow } from "./weatherComponents/Snow";
 type WeatherType =
   | "rain"
   | "snow"
