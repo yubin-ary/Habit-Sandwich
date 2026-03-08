@@ -54,7 +54,7 @@ const Main = () => {
   }, [habits]);
 
   // ===========================================================================
-  // sandwich history
+  // sandwich history - 샌드위치 히스토리가 바뀌면 로컬스토리지에 업데이트
   // ===========================================================================
   const [sandwichHistory, setSandwichHistory] = useState<DaySandwich[]>(
     JSON.parse(localStorage.getItem("history") ?? "[]")
@@ -71,7 +71,7 @@ const Main = () => {
     if (storedRaw) {
       try {
         // =====================================================================
-        //  오늘자 샌드위치 이미 만들어져있으면 그거 build
+        //  오늘자 샌드위치 이미 만들어져있으면 그거 build (completed 상태 이어받기 위해서)
         // =====================================================================
         const stored = JSON.parse(storedRaw) as TodaySandwich;
         if (stored?.date === today) {
