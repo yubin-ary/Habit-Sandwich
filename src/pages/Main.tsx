@@ -70,6 +70,9 @@ const Main = () => {
     const storedRaw = localStorage.getItem(TODAY_SANDWICH_KEY);
     if (storedRaw) {
       try {
+        // =====================================================================
+        //  오늘자 샌드위치 이미 만들어져있으면 그거 build
+        // =====================================================================
         const stored = JSON.parse(storedRaw) as TodaySandwich;
         if (stored?.date === today) {
           return buildTodaySandwich(today, habits, stored);
@@ -78,18 +81,14 @@ const Main = () => {
         console.warn("failed!");
       }
     }
+    //로컬스토리지에 저장돼있는거 없으면 새로 만듬
     return buildTodaySandwich(today, habits);
   });
 
   const daySandwich = useMemo<DaySandwich>(() => {
-    const completedCount = todaySandwich.habits.filter(
-      (v) => v.completed
-    ).length;
     return {
       ...todaySandwich,
-      perfect:
-        todaySandwich.habits.length > 0 &&
-        completedCount === todaySandwich.habits.length,
+      perfect: todaySandwich.habits.every((v) => v.completed),
     };
   }, [todaySandwich]);
 
@@ -122,15 +121,11 @@ const Main = () => {
 
       // 어제 todaySandwich를 sandwichHistory에 저장하고
       // 새로운 todaySandwich를 생성
+      // 정확성 위해서 daySandwich 안쓰고 prev 사용..
       setTodaySandwich((prevToday) => {
-        const completedCount = prevToday.habits.filter(
-          (v) => v.completed
-        ).length;
         const prevDay: DaySandwich = {
           ...prevToday,
-          perfect:
-            prevToday.habits.length > 0 &&
-            completedCount === prevToday.habits.length,
+          perfect: prevToday.habits.every((v) => v.completed),
         };
         setSandwichHistory((prev) => [...prev, prevDay]);
 
