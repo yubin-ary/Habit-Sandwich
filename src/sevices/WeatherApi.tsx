@@ -62,9 +62,7 @@ function getXY(lat: number, lon: number): number[] | undefined {
 
   const ro = (re * sf) / Math.tan(Math.PI * 0.25 + olat * 0.5) ** sn;
 
-  const ra =
-    (re * sf) /
-    Math.tan(Math.PI * 0.25 + lat * DEGRAD * 0.5 + Math.PI * 0.25) ** sn;
+  const ra = (re * sf) / Math.tan(Math.PI * 0.25 + lat * DEGRAD * 0.5) ** sn;
 
   let theta = lon * DEGRAD - olon;
 
@@ -115,10 +113,7 @@ const getSkyData = async (
     return;
   }
 };
-const getPtyData = async (
-  url2: string,
-  baseHour: string
-): Promise<string | undefined> => {
+const getPtyData = async (url2: string): Promise<string | undefined> => {
   try {
     const response2: WeatherApiResponse | undefined = await dataRequest(url2);
     if (!response2) return;
@@ -162,7 +157,7 @@ const WeatherApi = async (
   // =============================================================================
   //   pty 강수상태
   // =============================================================================
-  const PTY = getPtyData(url2, baseHour);
+  const PTY = getPtyData(url2);
   const [sky, pty] = await Promise.all([SKY, PTY]);
   return [sky, pty];
 };
